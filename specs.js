@@ -2,7 +2,7 @@ var jasmine = require('jasmine-node');
 var sys = require('sys');
 
 for(var key in jasmine) {
-  global[key] = jasmine[key];
+  //global[key] = jasmine[key];
 }
 
 var isVerbose = false;
@@ -17,5 +17,7 @@ process.argv.forEach(function(arg){
 
 
 jasmine.executeSpecsInFolder(__dirname + '/spec', function(runner, log){
-  // process.exit(runner.results().failedCount);
+  setTimeout(function() {
+    process.exit(runner.results().failedCount);
+  }, 1000);
 }, isVerbose, showColors);
