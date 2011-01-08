@@ -1,5 +1,6 @@
 var zombie          = require('zombie');
 var NodegrityServer = require('../lib/nodegrity_server');
+var helper          = require('./support/spec_helper.js');
 
 describe('NodegrityServer', function() {
   var port = 4444;
@@ -24,29 +25,28 @@ describe('NodegrityServer', function() {
 
   it('serves static files through HTTP', function() {
     var server = NodegrityServer(this.valid_config);
-    var requestFinished = false;
+    var finished = false;
     zombie.visit("http://localhost:"+this.valid_config['port']+"/", {debug: false}, function(err, browser) {
-      requestFinished = true;
       expect(err).toBeNull();
       if (err === null) {
         expect(browser.lastResponse.status).toBe(200);
       }
+      finished = true;
     });
-    waitsFor(function() { return requestFinished; }, "Time out", 2000);
+    waitsFor(function() { return finished; }, "Time out", 2000);
   });
 
+
   it('servers the main page of the application at /', function() {
-    var server = NodegrityServer(this.valid_config);
-    var requestFinished = false;
-    zombie.visit("http://localhost:"+this.valid_config['port']+"/", {debug: false}, function(err, browser) {
-      requestFinished = true;
+    var finished = false;
+    helper.visitAppPage('/', {debug: false}, function(err, browser) {
       expect(err).toBeNull();
       if (err === null) {
         expect(browser.response[2]).toMatch(/Nodegrity/);
         expect(browser.response[2]).toMatch(/html/);
-        console.log(browser.response);
       }
+      finished = true;
     });
-    waitsFor(function() { return requestFinished; }, "Time out", 2000);
+    waitsFor(function() { return finished; }, "Time out", 2000);
   });
 });
