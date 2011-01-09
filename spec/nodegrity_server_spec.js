@@ -36,7 +36,6 @@ describe('NodegrityServer', function() {
     waitsFor(function() { return finished; }, "Time out", 2000);
   });
 
-
   it('servers the main page of the application at /', function() {
     var finished = false;
     helper.visitAppPage('/', {debug: false}, function(err, browser) {
